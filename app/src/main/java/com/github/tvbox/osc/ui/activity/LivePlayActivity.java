@@ -56,6 +56,7 @@ import com.github.tvbox.osc.ui.adapter.LiveSettingItemAdapter;
 import com.github.tvbox.osc.ui.adapter.MyEpgAdapter;
 import com.github.tvbox.osc.ui.dialog.LivePasswordDialog;
 import com.github.tvbox.osc.ui.tv.widget.ViewObj;
+import com.github.tvbox.osc.util.CarUtils;
 import com.github.tvbox.osc.util.DefaultConfig;
 import com.github.tvbox.osc.util.EpgUtil;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
@@ -328,6 +329,23 @@ public class LivePlayActivity extends BaseActivity {
         tv_duration = (TextView) findViewById(R.id.tv_duration);
         iv_playpause = findViewById(R.id.iv_playpause);
         iv_play = findViewById(R.id.iv_play);
+
+        // 车机触屏模式：显示左上角返回键（TV 模式依赖遥控器返回键，无需显示）
+        View ivCarBack = findViewById(R.id.ivCarBack);
+        if (ivCarBack != null) {
+            if (CarUtils.isCar()) {
+                ivCarBack.setVisibility(View.VISIBLE);
+                ivCarBack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FastClickCheckUtil.check(v);
+                        onBackPressed();
+                    }
+                });
+            } else {
+                ivCarBack.setVisibility(View.GONE);
+            }
+        }
 
         tvSelectedChannel = findViewById(R.id.tv_selected_channel);
 

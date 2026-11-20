@@ -66,5 +66,7 @@ public class HawkConfig {
     public static final String DANMU_SIZE_SCALE = "danmu_size_scale";
     public static final String DANMU_RANDOM_COLOR = "danmu_random_color";
     public static final String DANMU_API = "danmu_api";
+    // 车机模式：-1 自动识别  0 强制关闭  1 强制开启
+    public static final String CAR_MODE = "car_mode";
     public static boolean hotVodDelete;
 }

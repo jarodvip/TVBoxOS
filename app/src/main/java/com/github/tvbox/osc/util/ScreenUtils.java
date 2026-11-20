@@ -32,6 +32,9 @@ public class ScreenUtils {
     }
 
     public static boolean isTv(Context context) {
+        // 车机（DiLink/方程豹）虽然是大屏且无电话模块，但属于触屏设备，
+        // 不能按电视处理，否则播放器返回键、锁屏键会被隐藏，触屏无法操作。
+        if (CarUtils.isCar()) return false;
         UiModeManager uiModeManager = (UiModeManager) context.getSystemService(UI_MODE_SERVICE);
         return uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION || (checkScreenLayoutIsTv(context) && !checkIsPhone(context));
     }

@@ -37,6 +37,7 @@ import com.github.tvbox.osc.ui.dialog.DanmuApiDialog;
 import com.github.tvbox.osc.ui.dialog.SearchRemoteTvDialog;
 import com.github.tvbox.osc.ui.dialog.SelectDialog;
 import com.github.tvbox.osc.ui.dialog.XWalkInitDialog;
+import com.github.tvbox.osc.util.CarUtils;
 import com.github.tvbox.osc.util.DanmuHelper;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
 import com.github.tvbox.osc.util.FileUtils;
@@ -102,6 +103,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
     private boolean selectLocalLive;
     private TextView tvDanmuOpenText;
     private TextView tvDanmuApiText;
+    private TextView tvCarMode;
 
     public static ModelSettingFragment newInstance() {
         return new ModelSettingFragment().setArguments();
@@ -132,6 +134,8 @@ public class ModelSettingFragment extends BaseLazyFragment {
         tvRecStyleText.setText(Hawk.get(HawkConfig.HOME_REC_STYLE, false) ? "是" : "否");
         tvShowPreviewText = findViewById(R.id.showPreviewText);
         tvShowPreviewText.setText(Hawk.get(HawkConfig.SHOW_PREVIEW, true) ? "开启" : "关闭");
+        tvCarMode = findViewById(R.id.tvCarMode);
+        refreshCarModeText();
         tvDebugOpen = findViewById(R.id.tvDebugOpen);
         tvParseWebView = findViewById(R.id.tvParseWebView);
         tvMediaCodec = findViewById(R.id.tvMediaCodec);
@@ -693,6 +697,20 @@ public class ModelSettingFragment extends BaseLazyFragment {
                 tvShowPreviewText.setText(Hawk.get(HawkConfig.SHOW_PREVIEW, true) ? "开启" : "关闭");
             }
         });
+        findViewById(R.id.llCarMode).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FastClickCheckUtil.check(v);
+                // 三态循环：自动(-1) -> 开启(1) -> 关闭(0) -> 自动(-1)
+                int mode = Hawk.get(HawkConfig.CAR_MODE, -1);
+                if (mode == -1) mode = 1;
+                else if (mode == 1) mode = 0;
+                else mode = -1;
+                Hawk.put(HawkConfig.CAR_MODE, mode);
+                CarUtils.reset();
+                refreshCarModeText();
+            }
+        });
         findViewById(R.id.llHistoryNum).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -810,6 +828,14 @@ public class ModelSettingFragment extends BaseLazyFragment {
 
         findViewById(R.id.llIjkCachePlay).setOnClickListener((view -> onClickIjkCachePlay(view)));
         findViewById(R.id.llClearCache).setOnClickListener((view -> onClickClearCache(view)));
+    }
+
+    private void refreshCarModeText() {
+        if (tvCarMode == null) return;
+        int mode = Hawk.get(HawkConfig.CAR_MODE, -1);
+        if (mode == 1) tvCarMode.setText("开启");
+        else if (mode == 0) tvCarMode.setText("关闭");
+        else tvCarMode.setText("自动");
     }
 
     private void restartAppAfterConfigChanged() {

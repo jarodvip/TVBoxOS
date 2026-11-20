@@ -12,6 +12,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <!-- 车机触屏返回键：TV 上依赖遥控器返回，车机上提供可点击的返回入口 -->
+    <ImageView
+        android:id="@+id/ivCarBack"
+        android:layout_width="@dimen/vs_80"
+        android:layout_height="@dimen/vs_80"
+        android:layout_gravity="top|start"
+        android:layout_marginTop="@dimen/vs_20"
+        android:layout_marginStart="@dimen/vs_20"
+        android:layout_marginLeft="@dimen/vs_20"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="@dimen/vs_20"
+        android:src="@drawable/icon_back"
+        android:visibility="gone" />
+
 	<FrameLayout
 		android:id="@+id/switchChannelSnapshotOverlay"
 		android:layout_width="match_parent"

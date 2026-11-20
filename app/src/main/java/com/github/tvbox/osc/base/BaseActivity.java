@@ -271,7 +271,9 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
 
     @Override
     public boolean isBaseOnWidth() {
-        return !(screenRatio >= 4.0f);
+        // 超宽/带鱼屏（如车机副驾屏 5120x1600，比例约 3.2）按宽度缩放会让高度溢出，
+        // 改为按高度缩放，保证内容完整显示。普通 16:9 屏（比例约 1.78）仍按宽度。
+        return !(screenRatio >= 3.0f);
     }
 
     protected static BitmapDrawable globalWp = null;
